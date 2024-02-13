@@ -1,7 +1,7 @@
 // Create the scene
 const scene = new THREE.Scene();
 const r = -Math.PI / 2;
-const moveSpeed = 0.1;
+let moveSpeed = 0.1;
 let canMove = true;
 let PlayerThirdPerson = false;
 let PlayerTempY;
@@ -122,30 +122,15 @@ var halfPlayerSize = playerSize / 2;
 var halfWallSize = wallSize / 2;
 
 // Check for collision with the wall
-if (
-  Player.position.z + halfPlayerSize >= Wall.position.z - halfWallSize &&
-  Player.position.x - halfPlayerSize <= Wall.position.x + halfWallSize &&
-  Player.position.x + halfPlayerSize >= Wall.position.x - halfWallSize &&
-  Player.position.z - halfPlayerSize <= Wall.position.z + halfWallSize
-) {
-  // Adjust the player's position based on the side of collision
+if ((Player.position.z + halfPlayerSize > Wall.position.z - halfWallSize && Player.position.z + halfPlayerSize < Wall.position.z + halfWallSize)&&(Player.position.x + halfPlayerSize > Wall.position.x - halfWallSize && Player.position.x - halfPlayerSize < Wall.position.x + halfWallSize)) {
+  //Player.position.z -= moveSpeed;
+}
+if ((Player.position.z - halfPlayerSize < Wall.position.z + halfWallSize && Player.position.z + halfPlayerSize > Wall.position.z - halfWallSize)&&(Player.position.x + halfPlayerSize > Wall.position.x - halfWallSize && Player.position.x - halfPlayerSize < Wall.position.x + halfWallSize)) {
+  //Player.position.z += moveSpeed;
+}
 
-  // Collision on the right side of the wall
-  if (Player.position.x > Wall.position.x && Player.position.x - halfPlayerSize < Wall.position.x + halfWallSize) {
-    canMove = false;
-    Player.position.x += 0.1;
-  }/* Collision on the left side of the wall*/else if (Player.position.x < Wall.position.x && Player.position.x + halfPlayerSize > Wall.position.x - halfWallSize) {
-    canMove = false;
-    Player.position.x -= 0.1;
-  }/* Collision on the back side of the wall*/else if (Player.position.z > Wall.position.z && Player.position.z - halfPlayerSize < Wall.position.z + halfWallSize) {
-    canMove = false
-    Player.position.z += 0.1;
-  }/* Collision on the front side of the wall*/else if (Player.position.z < Wall.position.z && Player.position.z + halfPlayerSize > Wall.position.z - halfWallSize) {
-    canMove = false;
-    Player.position.z -= 0.1;
-  }
-}else{
-  canMove = true;
+if ((Player.position.x - halfPlayerSize < Wall.position.x + halfWallSize && Player.position.x + halfPlayerSize > Wall.position.x - halfWallSize)&&(Player.position.z + halfPlayerSize > Wall.position.z - halfWallSize && Player.position.z - halfPlayerSize < Wall.position.z + halfWallSize)) {
+  //Player.position.x += moveSpeed;
 }
 
   Player3P.position.x = Player.position.x;
@@ -184,10 +169,14 @@ if (
   }
 }
   if (keyboard['KeyD']) {
-    if(canMove){
+    if ((Player.position.x + halfPlayerSize > Wall.position.x - halfWallSize && Player.position.x + halfPlayerSize < Wall.position.x + halfWallSize)&&(Player.position.z + halfPlayerSize > Wall.position.z - halfWallSize && Player.position.z - halfPlayerSize < Wall.position.z + halfWallSize)) {
+      moveSpeed = 0;
+    }else{
+      moveSpeed = 0.1;
+    }
     Player.position.z -= moveSpeed * Math.sin(rotateAngle);
     Player.position.x += moveSpeed * Math.cos(rotateAngle);
-  }
+  
 }
   if (keyboard['Space']) {
     if(!PlayerThirdPerson){
